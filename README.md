@@ -2,6 +2,15 @@
 
 Este proyecto corresponde al TP de la materia Implementacion y Actualizacion de Software (Universidad de Moron, 2026).
 
+## Guia de uso
+
+1. Instalar dependencias de desarrollo: `make install` (crea `.venv` automaticamente si no existe)
+2. Levantar la API: `make run`
+3. Ejecutar tests: `make test`
+4. Ver comandos disponibles: `make help`
+
+## Consigna
+
 ## Objetivo
 
 Diseñar, implementar y demostrar un pipeline completo de CI/CD, incluyendo:

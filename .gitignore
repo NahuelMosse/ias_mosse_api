@@ -27,6 +27,8 @@ dist/
 .coverage
 .coverage.*
 htmlcov/
+.tmp/
+pytest-cache-files-*/
 
 # Flask local runtime files
 instance/
