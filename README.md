@@ -5,9 +5,10 @@ Este proyecto corresponde al TP de la materia Implementacion y Actualizacion de 
 ## Guia de uso
 
 1. Instalar dependencias de desarrollo: `make install` (crea `.venv` automaticamente si no existe)
-2. Levantar la API: `make run`
-3. Ejecutar tests: `make test`
-4. Ver comandos disponibles: `make help`
+2. Crear archivo de entorno local: copiar `.env.example` a `.env`
+3. Levantar la API: `make run`
+4. Ejecutar tests: `make test`
+5. Ver comandos disponibles: `make help`
 
 ## Consigna
 
