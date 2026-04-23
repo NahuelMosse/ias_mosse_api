@@ -1,4 +1,5 @@
 from flask import Flask
+from .enviroment import enviroment
 
 
 def create_app() -> Flask:
