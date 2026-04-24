@@ -10,6 +10,24 @@ Este proyecto corresponde al TP de la materia Implementacion y Actualizacion de 
 4. Ejecutar tests: `make test`
 5. Ver comandos disponibles: `make help`
 
+Variables de entorno usadas por la app:
+
+- `ENV` (ejemplo: `development`)
+- `DEBUG` (`true`/`false`)
+- `DB_SCHEME` (opcional, default: `postgresql`)
+- `DB_HOST` (obligatoria)
+- `DB_PORT` (obligatoria)
+- `DB_NAME` (obligatoria)
+- `DB_USER` (obligatoria)
+- `DB_PASSWORD` (obligatoria)
+
+## Base de datos local (Docker)
+
+- Levantar Postgres: `make db-up`
+- Bajar servicios y volumen: `make db-down`
+- Levantar + migrate + seed: `make db-setup`
+- Reiniciar DB + setup completo: `make db-restart`
+
 ## Consigna
 
 ## Objetivo

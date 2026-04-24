@@ -1,4 +1,3 @@
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -7,6 +6,8 @@ ROOT = Path(__file__).resolve().parent.parent
 TMP_DIR = ROOT / ".tmp"
 VENV_DIR = ROOT / ".venv"
 VENV_PYTHON = VENV_DIR / "Scripts" / "python.exe"
+DOCKER_COMPOSE_FILE = ROOT / "docker" / "db" / "docker-compose.yml"
+ENV_FILE = ROOT / ".env"
 
 
 def run(cmd):
@@ -18,7 +19,9 @@ def run(cmd):
 
 
 def help_text():
-    print("Comandos: install | run | test | clean-temp | help")
+    print(
+        "Comandos: install | run | test | db-up | db-down | migrate | seed | db-setup | db-restart | help"
+    )
     print("Uso: make <comando>  o  python scripts/tasks.py <comando>")
 
 
@@ -30,6 +33,38 @@ def ensure_venv():
 
 def py():
     return str(VENV_PYTHON)
+
+
+def docker_compose(*args):
+    return run(
+        [
+            "docker",
+            "compose",
+            "--env-file",
+            str(ENV_FILE),
+            "-f",
+            str(DOCKER_COMPOSE_FILE),
+            *args,
+        ]
+    )
+
+
+def migrate():
+    print("No hay migraciones configuradas todavia. (placeholder migrate)")
+    return 0
+
+
+def seed():
+    print("No hay seeding configurado todavia. (placeholder seed)")
+    return 0
+
+
+def db_setup() -> int:
+    if docker_compose("up", "-d", "--wait") != 0:
+        return 1
+    if migrate() != 0:
+        return 1
+    return seed()
 
 
 def main():
@@ -44,6 +79,20 @@ def main():
         return run(
             [py(), "-m", "pytest", "-q", "-s", "-p", "no:cacheprovider", "--basetemp", str(TMP_DIR / "pytest"), "tests"]
         )
+    if cmd == "migrate":
+        return migrate()
+    if cmd == "seed":
+        return seed()
+    if cmd == "db-up":
+        return docker_compose("up", "-d", "--wait")
+    if cmd == "db-down":
+        return docker_compose("down", "-v")
+    if cmd == "db-setup":
+        return db_setup()
+    if cmd == "db-restart":
+        if docker_compose("down", "-v") != 0:
+            return 1
+        return db_setup()
     help_text()
     return 0 if cmd == "help" else 1
 
