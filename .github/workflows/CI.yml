@@ -34,19 +34,32 @@ jobs:
           echo "repository=${{ github.repository }}"
           echo "sha=${{ github.sha }}"
           echo "workflow_file=.github/workflows/CI.yml"
+          echo "vars_json=${{ toJson(vars) }}"
           sed -n '1,120p' .github/workflows/CI.yml
 
-          required_vars=(ENV DEBUG DB_SCHEME DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
-          for var_name in "${required_vars[@]}"; do
+          all_vars=(ENV DEBUG DB_SCHEME DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
+          for var_name in "${all_vars[@]}"; do
             value="${!var_name-}"
             if [ -n "$value" ]; then
               echo "VAR $var_name set"
             else
               echo "VAR $var_name empty"
-              echo "VAR $var_name empty in context"
-              exit 1
             fi
           done
+
+          missing=0
+          required_db_vars=(DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
+          for var_name in "${required_db_vars[@]}"; do
+            value="${!var_name-}"
+            if [ -z "$value" ]; then
+              echo "VAR $var_name empty in context"
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -97,19 +110,32 @@ jobs:
           echo "repository=${{ github.repository }}"
           echo "sha=${{ github.sha }}"
           echo "workflow_file=.github/workflows/CI.yml"
+          echo "vars_json=${{ toJson(vars) }}"
           sed -n '1,120p' .github/workflows/CI.yml
 
-          required_vars=(ENV DEBUG DB_SCHEME DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
-          for var_name in "${required_vars[@]}"; do
+          all_vars=(ENV DEBUG DB_SCHEME DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
+          for var_name in "${all_vars[@]}"; do
             value="${!var_name-}"
             if [ -n "$value" ]; then
               echo "VAR $var_name set"
             else
               echo "VAR $var_name empty"
-              echo "VAR $var_name empty in context"
-              exit 1
             fi
           done
+
+          missing=0
+          required_db_vars=(DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD)
+          for var_name in "${required_db_vars[@]}"; do
+            value="${!var_name-}"
+            if [ -z "$value" ]; then
+              echo "VAR $var_name empty in context"
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
 
       - name: Setup Python
         uses: actions/setup-python@v5
