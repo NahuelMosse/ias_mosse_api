@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      ENV: ${{ vars.ENV }}
+      DEBUG: ${{ vars.DEBUG }}
+      DB_SCHEME: ${{ vars.DB_SCHEME }}
+      DB_HOST: ${{ vars.DB_HOST }}
+      DB_PORT: ${{ vars.DB_PORT }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      DB_USER: ${{ vars.DB_USER }}
+      DB_PASSWORD: ${{ vars.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          pip install bandit
+
+      - name: Unit tests
+        run: python -m pytest -q -s -p no:cacheprovider --basetemp .tmp/pytest tests/modules/*/unit
+
+      - name: Integration tests
+        run: python -m pytest -q -s -p no:cacheprovider --basetemp .tmp/pytest tests/modules/*/integration
+
+      - name: Bandit security analysis
+        run: bandit -r app -ll
+
+  security-tests:
+    if: github.base_ref == 'main' && github.head_ref == 'develop'
+    runs-on: ubuntu-latest
+    needs: ci
+    env:
+      ENV: ${{ vars.ENV }}
+      DEBUG: ${{ vars.DEBUG }}
+      DB_SCHEME: ${{ vars.DB_SCHEME }}
+      DB_HOST: ${{ vars.DB_HOST }}
+      DB_PORT: ${{ vars.DB_PORT }}
+      DB_NAME: ${{ vars.DB_NAME }}
+      DB_USER: ${{ vars.DB_USER }}
+      DB_PASSWORD: ${{ vars.DB_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Security tests
+        run: python -m pytest -q -s -p no:cacheprovider --basetemp .tmp/pytest tests/security
