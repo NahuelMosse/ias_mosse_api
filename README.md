@@ -14,6 +14,7 @@ Variables de entorno usadas por la app:
 
 - `ENV` (ejemplo: `development`)
 - `DEBUG` (`true`/`false`)
+- `DB_SCHEME` (opcional, default: `postgresql`)
 - `DB_SCHEMA` (obligatoria, ejemplo: `dev`, `qa`, `prd`)
 - `DB_HOST` (obligatoria)
 - `DB_PORT` (obligatoria)
