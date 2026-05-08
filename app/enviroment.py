@@ -26,11 +26,15 @@ def _build_database_url() -> str:
     name = _required("DB_NAME")
     user = quote_plus(_required("DB_USER"))
     password = quote_plus(_required("DB_PASSWORD"))
-    return f"{scheme}://{user}:{password}@{host}:{port}/{name}"
+    schema = _required("DB_SCHEMA").strip()
+    base_url = f"{scheme}://{user}:{password}@{host}:{port}/{name}"
+    options = quote_plus(f"-csearch_path={schema}")
+    return f"{base_url}?options={options}"
 
 
 enviroment = SimpleNamespace(
     env=_optional("ENV", "development"),
     debug=_optional("DEBUG", "false").strip().lower() in TRUTHY_VALUES,
+    port=int(_optional("PORT", "5000")),
     database_url=_build_database_url(),
 )
