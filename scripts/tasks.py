@@ -5,7 +5,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TMP_DIR = ROOT / ".tmp"
 VENV_DIR = ROOT / ".venv"
-VENV_PYTHON = VENV_DIR / "Scripts" / "python.exe"
+VENV_PYTHON_LINUX = VENV_DIR / "bin" / "python"
+VENV_PYTHON_WINDOWS = VENV_DIR / "Scripts" / "python.exe"
+VENV_PYTHON = VENV_PYTHON_LINUX if VENV_PYTHON_LINUX.exists() else VENV_PYTHON_WINDOWS
 DOCKER_COMPOSE_FILE = ROOT / "docker" / "db" / "docker-compose.yml"
 ENV_FILE = ROOT / ".env"
 
@@ -32,7 +34,7 @@ def ensure_venv():
 
 
 def py():
-    return str(VENV_PYTHON)
+    return str(VENV_PYTHON) if VENV_PYTHON.exists() else sys.executable
 
 
 def docker_compose(*args):
