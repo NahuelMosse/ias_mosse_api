@@ -13,6 +13,7 @@ jobs:
       ENV: ${{ vars.ENV }}
       DEBUG: ${{ vars.DEBUG }}
       DB_SCHEME: ${{ vars.DB_SCHEME }}
+      DB_SCHEMA: ${{ vars.DB_SCHEMA }}
       DB_HOST: ${{ vars.DB_HOST }}
       DB_PORT: ${{ vars.DB_PORT }}
       DB_NAME: ${{ vars.DB_NAME }}
@@ -51,6 +52,7 @@ jobs:
       ENV: ${{ vars.ENV }}
       DEBUG: ${{ vars.DEBUG }}
       DB_SCHEME: ${{ vars.DB_SCHEME }}
+      DB_SCHEMA: ${{ vars.DB_SCHEMA }}
       DB_HOST: ${{ vars.DB_HOST }}
       DB_PORT: ${{ vars.DB_PORT }}
       DB_NAME: ${{ vars.DB_NAME }}
