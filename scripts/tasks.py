@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -22,7 +23,7 @@ def run(cmd):
 
 def help_text():
     print(
-        "Comandos: install | run | test | db-up | db-down | migrate | seed | db-setup | db-restart | help"
+        "Comandos: install | dev | prod | test | db-up | db-down | migrate | seed | db-setup | db-restart | help"
     )
     print("Uso: make <comando>  o  python scripts/tasks.py <comando>")
 
@@ -74,8 +75,14 @@ def main():
     if cmd == "install":
         ensure_venv()
         return run([py(), "-m", "pip", "install", "-r", "requirements-dev.txt"])
-    if cmd == "run":
+    if cmd == "dev":
         return run([py(), "app.py"])
+    if cmd == "prod":
+        if sys.platform == "win32":
+            print("Error: gunicorn no corre en Windows. Usá 'make dev' para desarrollo local.")
+            return 1
+        port = os.getenv("PORT", "10000")
+        return run([py(), "-m", "gunicorn", "-w", "1", "-b", f"0.0.0.0:{port}", "app:app"])
     if cmd == "test":
         TMP_DIR.mkdir(exist_ok=True)
         return run(

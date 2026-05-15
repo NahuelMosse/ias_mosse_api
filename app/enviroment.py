@@ -35,6 +35,6 @@ def _build_database_url() -> str:
 enviroment = SimpleNamespace(
     env=_optional("ENV", "development"),
     debug=_optional("DEBUG", "false").strip().lower() in TRUTHY_VALUES,
-    port=int(_optional("PORT", "5000")),
+    port=int(_optional("PORT", "10000")),
     database_url=_build_database_url(),
 )
