@@ -1,6 +1,6 @@
 PYTHON ?= python
 
-.PHONY: help install run test db-up db-down migrate seed db-setup db-restart
+.PHONY: help install dev prod test db-up db-down migrate seed db-setup db-restart
 
 help:
 	@$(PYTHON) scripts/tasks.py help
@@ -8,8 +8,11 @@ help:
 install:
 	@$(PYTHON) scripts/tasks.py install
 
-run:
-	@$(PYTHON) scripts/tasks.py run
+dev:
+	@$(PYTHON) scripts/tasks.py dev
+
+prod:
+	@$(PYTHON) scripts/tasks.py prod
 
 test:
 	@$(PYTHON) scripts/tasks.py test
